@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<launch>
+    <node pkg="differential_drive" type="diff_tf.py" name="diff_drive" output="log">
+        <!-- the rate at which to publish the transform -->
+        <param name="rate" value="10.0"/>
+        <!-- The number of wheel encoder ticks per meter of travel -->
+        <param name="ticks_meter" value="50"/>
+        <!-- Base frame_id -->
+        <param name="base_frame_id" value="link_chassis"/>
+        <!-- the name of the odometry reference frame -->
+        <param name="odom_frame_id" value="odom"/>
+    </node>      
+
+    <param name="robot_description" command="cat '$(find ugv_robot)/urdf/ugv.xacro'"/>
+
+    <!-- send fake joint values -->
+    <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher">
+        <param name="use_gui" value="False"/>
+    </node>
+
+    <!-- Combine joint values -->
+    <node name="robot_state_publisher" pkg="robot_state_publisher" type="state_publisher"/>
+
+    <!-- Show in Rviz   -->
+    <node name="rviz" pkg="rviz" type="rviz" />
+
+</launch>
